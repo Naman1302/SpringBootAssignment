@@ -1,6 +1,5 @@
 # SpringBootAssignment
 
-<br/>
 > A Spring Boot Application backed by MongoDB with the following schemaa nd API endpoints:
 <br/>
 ##Model
