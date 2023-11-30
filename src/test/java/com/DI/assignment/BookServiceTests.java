@@ -90,11 +90,7 @@ class BookServiceTests {
 
 		when(authorRepo.findByName("Asaram")).thenReturn(existingAuthor);
 
-		when(bookRepo.save(any(Book.class))).thenAnswer(invocation -> {
-			Book savedBook = invocation.getArgument(0);
-			savedBook.setId(bookId1);
-			return savedBook;
-		});
+		when(bookRepo.save(addBook)).thenReturn(addBook);
 
 		Book result=bookService.saveBook(addBook,author);
 
