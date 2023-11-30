@@ -11,9 +11,9 @@ git clone https://github.com/Naman1302/SpringBootAssignment.git
 
 This Command will copy a full project to your local environment
 
-##Model
+## Model
 
-### 1.Book 
+### 1.Book
 > a. id  b. copiesAvailable c. authorId d. genre
 ```java
 @Document(collection = "book")
@@ -58,39 +58,40 @@ public class Address { //No Entity beacuse this is just author being destructure
 
 Now for the API Endpoints we created Service, Controllers and Repositories
 
-##API endpoints:
+## API endpoints:
 
-Base Url: `http://localhost:8080` -> For local environment 
+Base Url: `http://localhost:8080` -> For local environment
 
-####For Books:
+#### For Books:
 
-| Web API                                             | URL (BaseUrl/)                             | Request Body/Params               |
-| --------------------------------------------------- | ------------------------------------------ | --------------------------------- |
-| Show all Books                                      | /books (GET)                               |              -                    |
-| Post new Book                                       | /books (POST)                              | A Book & Author name (String)     |
-| Search Books by genre                               | /books/byGenre (GET)                       | Book Genre (String)               |
+| Description                                        | URL (BaseUrl/)                             | Request Body/Params               |
+|----------------------------------------------------| ------------------------------------------ | --------------------------------- |
+| Show all Books                                     | /books (GET)                               |              -                    |
+| Post new Book                                      | /books (POST)                              | A Book & Author name (String)     |
+| Search Books by genre                              | /books/byGenre (GET)                       | Book Genre (String)               |
 | Search books by genre and copies count greater than | /books/byGenreAndCopiesCount               | Book Genre (String) & Copies(Int) |
-| Search by Authors's names                           | /byAuthorsNames                            | Author's Names seperated by ":"   |
+| Search by Authors's names                          | /byAuthorsNames                            | Author's Names seperated by ":"   |
 
 Things I had implemented:
-1) A GET api to get all the books from db 
-2) A GET api to get all the books from db whose genre matches the query param input 
+1) A GET api to get all the books from db
+2) A GET api to get all the books from db whose genre matches the query param input
 3) A GET api to get all the books from db whose genre matches the query param input and copiesAvailable is more than input provided in the path param.
 4) A GET api to fetch all books whose author is in one of the input provided in the query params
-5) A POST api to save book detail in db (including validations of not blank, not null etc) -> By taking names of author we will fetch the authorId 
+5) A POST api to save book detail in db (including validations of not blank, not null etc) -> By taking names of author we will fetch the authorId
 
-####For Authors:
-| Web API                                             | URL (BaseUrl/)                             | Request Body/Params               |
-| --------------------------------------------------- | ------------------------------------------ | --------------------------------- |
-| Show all Authors                                    | /authors (GET)                             |              -                    |
-| Post new Authors                                    | authors (POST)                             | A Author                          |         
-| Search Authors by Names Like                        | /books/byNamesLike (GET)                   | A Author Name Pattern (String)    |
+#### For Authors:
+
+| Description                  | URL (BaseUrl/)                             | Request Body/Params               |
+|------------------------------| ------------------------------------------ | --------------------------------- |
+| Show all Authors             | /authors (GET)                             |              -                    |
+| Post new Authors             | authors (POST)                             | A Author                          |         
+| Search Authors by Names Like | /books/byNamesLike (GET)                   | A Author Name Pattern (String)    |
 
 Things I had implemented:
 1) A GET api to get all the authors from db
-2) A GET api to fetch all authors whose name matches the regular expression provided in the input query params.
+2) A GET api to fetch all authors whose name matches the regular expression provided in the input query params by using Regex queries from MongoDbRepository
 3) A POST api to save author detail in db (including validations of not blank, not null etc)
 
-##Unit Tests:
+## Unit Tests:
 
-> Writtern tests using MockitTo and JUnit 
+> Written tests using Mockito and JUnit 
