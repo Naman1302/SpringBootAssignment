@@ -1,6 +1,6 @@
 # SpringBootAssignment
 
-> A Spring Boot Application backed by MongoDB with the following schemaa nd API endpoints:
+> A Spring Boot Application backed by MongoDB with the following schemaa and API endpoints:
 <br/>
 
 #### Clone Project
