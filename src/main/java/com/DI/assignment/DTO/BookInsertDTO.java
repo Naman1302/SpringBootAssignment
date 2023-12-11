@@ -10,14 +10,6 @@ public class BookInsertDTO {
         return book;
     }
 
-    @Override
-    public String toString() {
-        return "BookInsertDTO{" +
-                "book=" + book.getCopiesAvailable() + " " +book.getGenre()+
-                ", authorName='" + authorName + '\'' +
-                '}';
-    }
-
     public void setBook(Book book) {
         this.book = book;
     }

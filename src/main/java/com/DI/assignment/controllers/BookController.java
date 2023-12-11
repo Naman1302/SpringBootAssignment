@@ -1,8 +1,11 @@
 package com.DI.assignment.controllers;
 
+import com.DI.assignment.DTO.BookDTO;
 import com.DI.assignment.DTO.BookInsertDTO;
 import com.DI.assignment.Entity.Book;
+import com.DI.assignment.Utils.BookUtil;
 import com.DI.assignment.services.BookService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,27 +19,27 @@ public class BookController {
     @Autowired
     private BookService bookService;
     @GetMapping
-    public List<Book> getBooks(){
+    public List<BookDTO> getBooks(){
         return bookService.getAllBooks();
     }
     @GetMapping("/byGenre")
-    public List<Book> getBookByGenre(@RequestParam String genre){
+    public List<BookDTO> getBookByGenre(@RequestParam String genre){
         return bookService.getByGenre(genre);
     }
     @GetMapping("/byGenreAndCount")
-    public List<Book> getBooksByGenreAndCopiesCount(@RequestParam String genre,@RequestParam int copies){
+    public List<BookDTO> getBooksByGenreAndCopiesCount(@RequestParam String genre,@RequestParam int copies){
         return bookService.getByGenreAndCopiesCount(genre,copies);
     }
     @GetMapping("/byAuthorsNames")
-    public List<Book> getBooksByAuthorsName(@RequestParam String authorList){
+    public List<BookDTO> getBooksByAuthorsName(@RequestParam String authorList){
         return bookService.getBooksByAuthorsName(authorList);
     }
     @PostMapping
-    public ResponseEntity<Book> addBook(@RequestBody @Validated BookInsertDTO request){
+    public ResponseEntity<BookDTO> addBook(@Valid @RequestBody  BookInsertDTO request){
         //System.out.println(request.toString());
-        Book book=request.getBook();
+        BookDTO bookDTO= BookUtil.entityToDTO(request.getBook());
         String authorName=request.getAuthorName();
-        Book savedBook=bookService.saveBook(book,authorName);
+        BookDTO savedBook=bookService.saveBook(bookDTO,authorName);
         return ResponseEntity.ok(savedBook);
     }
 }

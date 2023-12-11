@@ -1,16 +1,15 @@
-package com.DI.assignment.Entity;
+package com.DI.assignment.DTO;
 
-import org.bson.types.ObjectId;
+import com.DI.assignment.Entity.Address;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Document(collection = "author")
-public class Author {
+public class AuthorDTO {
     @Id
     public ObjectId id;
     @NotBlank(message = "Name is mandatory")
@@ -19,36 +18,23 @@ public class Author {
     private Address address;
     private List<ObjectId> bookList;
 
-    public Author() {
+    public AuthorDTO() {
         this.bookList=new ArrayList<>();
     }
 
-    public Author(ObjectId id, String name, Address address) {
+    public AuthorDTO(ObjectId id, String name, Address address) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.bookList=new ArrayList<>();
     }
 
-    public List<ObjectId> getBookList() {
-        return bookList;
-    }
-
-    public void setBookList(List<ObjectId> bookList) {
-        this.bookList = bookList;
-    }
-
-    public ObjectId getid() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setid(ObjectId id) {
+    public void setId(ObjectId id) {
         this.id = id;
-    }
-
-    public Author(String name, Address address) {
-        this.name = name;
-        this.address = address;
     }
 
     public String getName() {
@@ -67,5 +53,11 @@ public class Author {
         this.address = address;
     }
 
+    public List<ObjectId> getBookList() {
+        return bookList;
+    }
 
+    public void setBookList(List<ObjectId> bookList) {
+        this.bookList = bookList;
+    }
 }

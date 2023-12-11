@@ -1,7 +1,9 @@
 package com.DI.assignment;
 
+import com.DI.assignment.DTO.AuthorDTO;
 import com.DI.assignment.Entity.Address;
 import com.DI.assignment.Entity.Author;
+import com.DI.assignment.Utils.AuthorUtil;
 import com.DI.assignment.repository.AuthorRepo;
 import com.DI.assignment.services.AuthorService;
 import org.bson.types.ObjectId;
@@ -26,21 +28,21 @@ public class AuthorServiceTests {
     private final ObjectId authorId1=new ObjectId(),authorId2=new ObjectId();
     @Test
     public void getAllAuthorsTest(){
-        Author a1=new Author();
+        AuthorDTO a1=new AuthorDTO();
         a1.setName("Ram");
         a1.setAddress(new Address(2,"Kali","Cutta"));
-        a1.setid(authorId1);
+        a1.setId(authorId1);
 
-        Author a2=new Author();
+        AuthorDTO a2=new AuthorDTO();
         a1.setName("Shyam");
         a1.setAddress(new Address(4,"Juhu","Maharashtra"));
-        a1.setid(authorId2);
+        a1.setId(authorId2);
 
-        List<Author> authorList=List.of(a1,a2);
+        List<AuthorDTO> authorList=List.of(a1,a2);
 
         when(authorRepo.findAll()).thenReturn(authorList);
 
-        List<Author> result=authorService.getAllAuthors();
+        List<AuthorDTO> result=authorService.getAllAuthors();
 
         assertNotNull(result);
         assertEquals(2,result.size());
@@ -54,8 +56,8 @@ public class AuthorServiceTests {
         testAuthor.setAddress(new Address(56,"Lalu","Mongol"));
 
         when(authorRepo.save(testAuthor)).thenReturn(testAuthor);
-
-        Author result=authorService.addAuthor(testAuthor);
+        AuthorDTO dto=AuthorUtil.entityToDTO(testAuthor);
+        AuthorDTO result=authorService.addAuthor(dto);
 
         assertNotNull(result);
         assertEquals(testAuthor,result);
@@ -64,17 +66,17 @@ public class AuthorServiceTests {
     public void getAllAuthorsByNamesLikeTest(){
         String authorPattern="Ra";
 
-        Author a1=new Author(authorId1,"Ravan",new Address(45,"Lanka","Matara"));
-        Author a2=new Author(authorId2,"Vibhishan",new Address(46,"Lanka","Matara"));
+        AuthorDTO a1=new AuthorDTO(authorId1,"Ravan",new Address(45,"Lanka","Matara"));
+        AuthorDTO a2=new AuthorDTO(authorId2,"Vibhishan",new Address(46,"Lanka","Matara"));
 
-        List<Author> expectedAuthors= List.of(a1);
+        List<AuthorDTO> expectedAuthors= List.of(a1);
 
-        when(authorRepo.save(a1)).thenReturn(a1);
-        when(authorRepo.save(a2)).thenReturn(a2);
+        when(authorRepo.save(AuthorUtil.dtoToEntity(a1))).thenReturn(a1);
+        when(authorRepo.save(AuthorUtil.dtoToEntity(a2))).thenReturn(a2);
 
         when(authorRepo.searchAuthorsByNamesLike(authorPattern)).thenReturn(expectedAuthors);
 
-        List<Author> result=authorService.getAllAuthorsByNamesLike(authorPattern);
+        List<AuthorDTO> result=authorService.getAllAuthorsByNamesLike(authorPattern);
 
         assertNotNull(result);
         assertEquals(1,result.size());

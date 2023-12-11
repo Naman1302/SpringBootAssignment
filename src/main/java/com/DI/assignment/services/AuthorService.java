@@ -1,31 +1,31 @@
 package com.DI.assignment.services;
 
+import com.DI.assignment.DTO.AuthorDTO;
 import com.DI.assignment.Entity.Author;
+import com.DI.assignment.Utils.AuthorUtil;
 import com.DI.assignment.repository.AuthorRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthorService {
     @Autowired
     private AuthorRepo authorRepo;
 
-    public List<Author> getAllAuthors() {
-        return authorRepo.findAll();
+    public List<AuthorDTO> getAllAuthors() {
+        List<Author> authors= authorRepo.findAll();
+        return authors.stream().map(AuthorUtil::entityToDTO).collect(Collectors.toList());
     }
-    public Author addAuthor(Author author){
-        if(author!=null && !author.getName().isEmpty() && author.getAddress()!=null && !author.getAddress().isBlank() ) {
-            System.out.println("Author Saved!!");
-            return authorRepo.save(author);
-        }
-        else {
-            throw new IllegalArgumentException("Invalid/Incomplete details given");
-        }
+    public AuthorDTO addAuthor(AuthorDTO authorDTO){
+        Author author= authorRepo.save(AuthorUtil.dtoToEntity(authorDTO));
+        return AuthorUtil.entityToDTO(author);
     }
 
-    public List<Author> getAllAuthorsByNamesLike(String authorPattern) {
-        return authorRepo.searchAuthorsByNamesLike(authorPattern);
+    public List<AuthorDTO> getAllAuthorsByNamesLike(String authorPattern) {
+        List<Author> authors=authorRepo.searchAuthorsByNamesLike(authorPattern);
+        return authors.stream().map(AuthorUtil::entityToDTO).collect(Collectors.toList());
     }
 }

@@ -1,7 +1,11 @@
 package com.DI.assignment.services;
 
+import com.DI.assignment.DTO.AuthorDTO;
+import com.DI.assignment.DTO.BookDTO;
 import com.DI.assignment.Entity.Author;
 import com.DI.assignment.Entity.Book;
+import com.DI.assignment.Utils.AuthorUtil;
+import com.DI.assignment.Utils.BookUtil;
 import com.DI.assignment.repository.AuthorRepo;
 import com.DI.assignment.repository.BookRepo;
 import org.bson.types.ObjectId;
@@ -12,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -19,38 +24,36 @@ public class BookService {
     private BookRepo bookRepo;
     @Autowired
     private AuthorRepo authorRepo;
-    public Book saveBook(Book book, String author){
-        if( book!=null && book.getCopiesAvailable()>=0 && !author.isEmpty() && book.getGenre()!=null ) {
-            Author foundAuthor=authorRepo.findByName(author);
-            if(foundAuthor==null){
-                Author newAuthor=new Author();
-                newAuthor.setName(author);
-                authorRepo.save(newAuthor);
-                book.setAuthorId(newAuthor.getid());
+    public BookDTO saveBook(BookDTO bookDTO, String author){
+            AuthorDTO foundAuthorDTO= AuthorUtil.entityToDTO(authorRepo.findByName(author));
+            if(foundAuthorDTO==null){
+                throw new IllegalArgumentException("No Author found");
             }
             else{
-                book.setAuthorId(foundAuthor.getid());
+                bookDTO.setAuthorId(foundAuthorDTO.getId());
             }
-            Book savedBook=bookRepo.save(book);
-            foundAuthor.getBookList().add(savedBook.getId());
-            authorRepo.save(foundAuthor);
+            BookDTO savedBook=BookUtil.entityToDTO(bookRepo.save(BookUtil.dtoToEntity(bookDTO)));
+            foundAuthorDTO.getBookList().add(savedBook.getId());
+            authorRepo.save(AuthorUtil.dtoToEntity(foundAuthorDTO));
             return savedBook;
-        }
-        else{
-            throw new IllegalArgumentException("Invalid/Incomplete details given");
-        }
     }
-    public List<Book> getAllBooks(){
-        return bookRepo.findAll();
+    public List<BookDTO> getAllBooks(){
+        List<Book> books=bookRepo.findAll();
+
+        return books.stream().map(BookUtil::entityToDTO).collect(Collectors.toList());
     }
-    public List<Book> getByGenre(String genre){
-        return bookRepo.searchByGenre(genre);
+    public List<BookDTO> getByGenre(String genre){
+        List<Book> books=bookRepo.searchByGenre(genre);
+
+        return books.stream().map(BookUtil::entityToDTO).collect(Collectors.toList());
     }
-    public List<Book> getByGenreAndCopiesCount(String genre,int copies){
-        return bookRepo.searchByGenreAndCopiesCount(genre,copies);
+    public List<BookDTO> getByGenreAndCopiesCount(String genre,int copies){
+        List<Book> books= bookRepo.searchByGenreAndCopiesCount(genre,copies);
+
+        return books.stream().map(BookUtil::entityToDTO).collect(Collectors.toList());
     }
 
-    public List<Book> getBooksByAuthorsName(String authorList) {
+    public List<BookDTO> getBooksByAuthorsName(String authorList) {
         String[] authors= authorList.split(":");
         List<Book> fetchedBooks=new ArrayList<>();
         for (String author : authors) {
@@ -65,6 +68,6 @@ public class BookService {
                 );
             }
         }
-        return fetchedBooks;
+        return fetchedBooks.stream().map(BookUtil::entityToDTO).collect(Collectors.toList());
     }
 }

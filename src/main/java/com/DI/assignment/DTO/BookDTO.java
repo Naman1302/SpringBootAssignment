@@ -1,14 +1,11 @@
-package com.DI.assignment.Entity;
+package com.DI.assignment.DTO;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "book")
-public class Book {
+public class BookDTO {
     @Id
     private ObjectId id;
     @Min(value = 1)
@@ -17,15 +14,14 @@ public class Book {
     private String genre;
     private ObjectId authorId;
 
-    public Book(ObjectId id,int copiesAvailable,String genre,ObjectId authorId) {
-        this.id=id;
-        this.copiesAvailable=copiesAvailable;
-        this.genre=genre;
-        this.authorId=authorId;
+    public BookDTO() {
     }
 
-    public Book() {
-
+    public BookDTO(ObjectId id, int copiesAvailable, String genre, ObjectId authorId) {
+        this.id = id;
+        this.copiesAvailable = copiesAvailable;
+        this.genre = genre;
+        this.authorId = authorId;
     }
 
     public ObjectId getId() {
@@ -34,15 +30,6 @@ public class Book {
 
     public void setId(ObjectId id) {
         this.id = id;
-    }
-
-    public ObjectId getAuthorId() {
-        return authorId;
-    }
-
-
-    public void setAuthorId(ObjectId authorId) {
-        this.authorId = authorId;
     }
 
     public int getCopiesAvailable() {
@@ -61,4 +48,11 @@ public class Book {
         this.genre = genre;
     }
 
+    public ObjectId getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(ObjectId authorId) {
+        this.authorId = authorId;
+    }
 }
