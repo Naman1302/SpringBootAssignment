@@ -1,6 +1,8 @@
 package com.DI.assignment.controllers;
 
+import com.DI.assignment.DTO.AuthorDTO;
 import com.DI.assignment.Entity.Author;
+import com.DI.assignment.Utils.AuthorUtil;
 import com.DI.assignment.services.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,17 +16,17 @@ public class Authorcontroller {
     public AuthorService authorService;
 
     @GetMapping
-    public List<Author> getAllAuthors(){
+    public List<AuthorDTO> getAllAuthors(){
         return authorService.getAllAuthors();
     }
     @GetMapping("/byNamesLike")
-    public List<Author> getAllByNamesLike(@RequestParam String authorPattern) {
+    public List<AuthorDTO> getAllByNamesLike(@RequestParam String authorPattern) {
         return authorService.getAllAuthorsByNamesLike(authorPattern);
     }
 
     @PostMapping
-    public Author addAuthor(@RequestBody Author author){
-        return authorService.addAuthor(author);
+    public AuthorDTO addAuthor(@RequestBody AuthorDTO authorDTO){
+        return authorService.addAuthor(authorDTO);
     }
 
 }
