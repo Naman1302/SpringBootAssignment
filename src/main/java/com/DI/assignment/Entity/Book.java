@@ -11,6 +11,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Book {
     @Id
     private ObjectId id;
+    @NotBlank(message = "Name is mandatory")
+    private String bookName;
     @Min(value = 1)
     private int copiesAvailable;
     @NotBlank(message = "Genre cannot be blank")
@@ -59,6 +61,13 @@ public class Book {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+    public String getBookName() {
+        return bookName;
+    }
+
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
     }
 
 }

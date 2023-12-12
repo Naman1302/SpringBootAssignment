@@ -10,8 +10,10 @@ import com.DI.assignment.repository.AuthorRepo;
 import com.DI.assignment.repository.BookRepo;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,10 +22,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class BookService {
+
+    private final RestTemplate restTemplate;
     @Autowired
     private BookRepo bookRepo;
     @Autowired
     private AuthorRepo authorRepo;
+    public BookService(RestTemplateBuilder builder){
+        this.restTemplate=builder.build();
+    }
     public BookDTO saveBook(BookDTO bookDTO, String author){
             AuthorDTO foundAuthorDTO= AuthorUtil.entityToDTO(authorRepo.findByName(author));
             if(foundAuthorDTO==null){
@@ -55,19 +62,22 @@ public class BookService {
 
     public List<BookDTO> getBooksByAuthorsName(String authorList) {
         String[] authors= authorList.split(":");
-        List<Book> fetchedBooks=new ArrayList<>();
+        List<BookDTO> fetchedBooks=new ArrayList<>();
+        List<ObjectId> authorIdList=new ArrayList<>();
         for (String author : authors) {
-            Author test = authorRepo.findByName(author);
+            AuthorDTO test = AuthorUtil.entityToDTO(authorRepo.findByName(author));
             if(test!=null){
-                List<ObjectId> list=test.getBookList();
-                list.forEach(
-                        (bookId)-> {
-                            Book fetchedBook=bookRepo.getById(bookId);
-                            fetchedBooks.add(fetchedBook);
-                        }
-                );
+                authorIdList.add(test.getId());
             }
         }
-        return fetchedBooks.stream().map(BookUtil::entityToDTO).collect(Collectors.toList());
+        return bookRepo.findByAuthorIdIn(authorIdList).stream().map(BookUtil::entityToDTO).collect(Collectors.toList());
+    }
+
+    public List<BookDTO> getBooksByAuthorsNameByFlux(String authorList){
+        String fluxApi="http://localhost:8081/books/byAuthorsNames";
+
+        BookDTO[] response=restTemplate.getForObject(fluxApi+"?authorList={authorList}",BookDTO[].class,authorList);
+
+        return Arrays.asList(response);
     }
 }

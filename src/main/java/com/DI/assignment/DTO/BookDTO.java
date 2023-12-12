@@ -8,6 +8,8 @@ import org.springframework.data.annotation.Id;
 public class BookDTO {
     @Id
     private ObjectId id;
+    @NotBlank(message = "Name is mandatory")
+    private String bookName;
     @Min(value = 1)
     private int copiesAvailable;
     @NotBlank(message = "Genre cannot be blank")
@@ -17,8 +19,9 @@ public class BookDTO {
     public BookDTO() {
     }
 
-    public BookDTO(ObjectId id, int copiesAvailable, String genre, ObjectId authorId) {
+    public BookDTO(ObjectId id,String bookName, int copiesAvailable, String genre, ObjectId authorId) {
         this.id = id;
+        this.bookName=bookName;
         this.copiesAvailable = copiesAvailable;
         this.genre = genre;
         this.authorId = authorId;
@@ -54,5 +57,13 @@ public class BookDTO {
 
     public void setAuthorId(ObjectId authorId) {
         this.authorId = authorId;
+    }
+
+    public String getBookName() {
+        return bookName;
+    }
+
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
     }
 }
