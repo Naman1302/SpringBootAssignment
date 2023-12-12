@@ -15,7 +15,10 @@ public interface BookRepo extends MongoRepository<Book,String> {
     @Query("{'genre' : ?0, 'copiesAvailable' : {$gte : ?1} }")
     List<Book> searchByGenreAndCopiesCount(String genre, int copiesAvailable);
 
+//    List<BookDTO> findAllAsDTO();
     List<Book> findByAuthorIdIn(List<ObjectId> authorIdList);
     @Query("{_id : ?0}")
     Book getById(ObjectId bookId);
+
+    List<BookDTO> findByIdIn(List<ObjectId> idList);
 }

@@ -39,6 +39,10 @@ public class BookController {
         return bookService.getBooksByAuthorsNameByFlux(authorList);
 
     }
+    @GetMapping("/getBookByIds")
+    public List<BookDTO> getBooksByIds(@RequestParam String bookIdList){
+        return bookService.getBooksByIds(bookIdList);
+    }
     @PostMapping
     public ResponseEntity<BookDTO> addBook(@Valid @RequestBody  BookInsertDTO request){
         //System.out.println(request.toString());

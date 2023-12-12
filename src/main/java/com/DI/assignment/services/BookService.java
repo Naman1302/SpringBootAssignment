@@ -62,7 +62,6 @@ public class BookService {
 
     public List<BookDTO> getBooksByAuthorsName(String authorList) {
         String[] authors= authorList.split(":");
-        List<BookDTO> fetchedBooks=new ArrayList<>();
         List<ObjectId> authorIdList=new ArrayList<>();
         for (String author : authors) {
             AuthorDTO test = AuthorUtil.entityToDTO(authorRepo.findByName(author));
@@ -79,5 +78,14 @@ public class BookService {
         BookDTO[] response=restTemplate.getForObject(fluxApi+"?authorList={authorList}",BookDTO[].class,authorList);
 
         return Arrays.asList(response);
+    }
+
+    public List<BookDTO> getBooksByIds(String bookIdList) {
+        List<ObjectId> idList= Arrays.stream(bookIdList.split(","))
+                .toList()
+                .stream()
+                .map(ObjectId::new)
+                .toList();
+        return bookRepo.findByIdIn(idList);
     }
 }
