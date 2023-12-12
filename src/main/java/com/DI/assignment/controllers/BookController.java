@@ -2,14 +2,14 @@ package com.DI.assignment.controllers;
 
 import com.DI.assignment.DTO.BookDTO;
 import com.DI.assignment.DTO.BookInsertDTO;
-import com.DI.assignment.Entity.Book;
 import com.DI.assignment.Utils.BookUtil;
 import com.DI.assignment.services.BookService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -33,6 +33,11 @@ public class BookController {
     @GetMapping("/byAuthorsNames")
     public List<BookDTO> getBooksByAuthorsName(@RequestParam String authorList){
         return bookService.getBooksByAuthorsName(authorList);
+    }
+    @GetMapping("byAuthorNameByFlux")
+    public List<BookDTO> getBooksByAuthorsNamesByFlux(@RequestParam String authorList){
+        return bookService.getBooksByAuthorsNameByFlux(authorList);
+
     }
     @PostMapping
     public ResponseEntity<BookDTO> addBook(@Valid @RequestBody  BookInsertDTO request){
