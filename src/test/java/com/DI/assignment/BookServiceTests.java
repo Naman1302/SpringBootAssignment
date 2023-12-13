@@ -10,8 +10,10 @@ import com.DI.assignment.repository.BookRepo;
 import com.DI.assignment.services.BookService;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
@@ -21,7 +23,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class BookServiceTests {
 	@InjectMocks
 	private BookService bookService;
@@ -32,11 +34,11 @@ class BookServiceTests {
 
 	private final ObjectId bookId1 = new ObjectId(),bookId2=new ObjectId();
 	private final ObjectId authorId1 = new ObjectId(),authorId2=new ObjectId();
-	private final List<BookDTO> testBooks= Arrays.asList(new BookDTO(bookId1,57,"Killer",authorId1),new BookDTO(bookId2,45,"Thriller",authorId2));
+	private final List<BookDTO> testBooks= Arrays.asList(new BookDTO(bookId1,"Hellen",57,"Killer",authorId1),new BookDTO(bookId2,"Rola",45,"Thriller",authorId2));
 
 	@Test
 	public void getAllBooksTest() {
-		when(bookRepo.findAllAsDTO()).thenReturn(testBooks);
+		when(bookRepo.findAll()).thenReturn(testBooks.stream().map(BookUtil::dtoToEntity).collect(Collectors.toList()));
 		List<BookDTO> expectedBooks=bookService.getAllBooks();
 		assertEquals(testBooks,expectedBooks);
 	}

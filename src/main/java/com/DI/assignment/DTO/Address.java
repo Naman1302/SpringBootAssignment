@@ -1,4 +1,4 @@
-package com.DI.assignment.Entity;
+package com.DI.assignment.DTO;
 
 public class Address {
     private int houseNumber;

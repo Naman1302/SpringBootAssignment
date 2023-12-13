@@ -1,21 +1,24 @@
 package com.DI.assignment.DTO;
 
-import com.DI.assignment.Entity.Address;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class AuthorDTO {
-    @Id
+
     public ObjectId id;
+
     @NotBlank(message = "Name is mandatory")
     private String name;
+
     @NotNull(message = "Address is mandatory")
     private Address address;
+
     private List<ObjectId> bookList;
 
     public AuthorDTO() {
@@ -29,32 +32,16 @@ public class AuthorDTO {
         this.bookList=new ArrayList<>();
     }
 
-    public ObjectId getId() {
-        return id;
-    }
-
     public void setId(ObjectId id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
     public void setAddress(Address address) {
         this.address = address;
-    }
-
-    public List<ObjectId> getBookList() {
-        return bookList;
     }
 
     public void setBookList(List<ObjectId> bookList) {

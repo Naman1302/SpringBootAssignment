@@ -1,5 +1,6 @@
 package com.DI.assignment.Entity;
 
+import com.DI.assignment.DTO.Address;
 import org.bson.types.ObjectId;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
