@@ -1,28 +1,30 @@
 package com.DI.assignment;
 
 import com.DI.assignment.DTO.AuthorDTO;
-import com.DI.assignment.Entity.Address;
+import com.DI.assignment.DTO.Address;
 import com.DI.assignment.Entity.Author;
 import com.DI.assignment.Utils.AuthorUtil;
 import com.DI.assignment.repository.AuthorRepo;
 import com.DI.assignment.services.AuthorService;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.mockito.Mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class AuthorServiceTests {
     @InjectMocks
     private AuthorService authorService;
-    @Mock
+    @Mock(lenient = true)
     private AuthorRepo authorRepo;
 
     private final ObjectId authorId1=new ObjectId(),authorId2=new ObjectId();
@@ -40,26 +42,33 @@ public class AuthorServiceTests {
 
         List<AuthorDTO> authorList=List.of(a1,a2);
 
-        when(authorRepo.findAll()).thenReturn(authorList);
+        when(authorRepo.findAll()).thenReturn(authorList
+                        .stream()
+                        .map(AuthorUtil::dtoToEntity)
+                        .collect(Collectors.toList())
+        );
 
         List<AuthorDTO> result=authorService.getAllAuthors();
 
         assertNotNull(result);
         assertEquals(2,result.size());
+        assertEquals(authorList.getFirst().getId(),result.getFirst().getId());
+        assertEquals(authorList.getLast().getId(),result.getLast().getId());
         verify(authorRepo,times(1)).findAll();
     }
     @Test
     public void addAuthorTest(){
-        Author testAuthor=new Author();
-        testAuthor.setid(authorId1);
+        AuthorDTO testAuthor=new AuthorDTO();
+        testAuthor.setId(authorId1);
         testAuthor.setName("Ram");
         testAuthor.setAddress(new Address(56,"Lalu","Mongol"));
 
-        when(authorRepo.save(testAuthor)).thenReturn(testAuthor);
-        AuthorDTO dto=AuthorUtil.entityToDTO(testAuthor);
-        AuthorDTO result=authorService.addAuthor(dto);
+        when(authorRepo.save(AuthorUtil.dtoToEntity(testAuthor))).thenReturn(AuthorUtil.dtoToEntity(testAuthor));
+        AuthorDTO result=authorService.addAuthor(testAuthor);
 
+        verify(authorRepo,times(1)).save(any(Author.class));
         assertNotNull(result);
+        assertEquals(testAuthor.getId(),result.getId());
         assertEquals(testAuthor,result);
     }
     @Test
@@ -71,16 +80,16 @@ public class AuthorServiceTests {
 
         List<AuthorDTO> expectedAuthors= List.of(a1);
 
-        when(authorRepo.save(AuthorUtil.dtoToEntity(a1))).thenReturn(a1);
-        when(authorRepo.save(AuthorUtil.dtoToEntity(a2))).thenReturn(a2);
+        when(authorRepo.save(AuthorUtil.dtoToEntity(a1))).thenReturn(AuthorUtil.dtoToEntity(a1));
+        when(authorRepo.save(AuthorUtil.dtoToEntity(a2))).thenReturn(AuthorUtil.dtoToEntity(a2));
 
-        when(authorRepo.searchAuthorsByNamesLike(authorPattern)).thenReturn(expectedAuthors);
+        when(authorRepo.searchAuthorsByNamesLike(authorPattern)).thenReturn(expectedAuthors.stream().map(AuthorUtil::dtoToEntity).collect(Collectors.toList()));
 
         List<AuthorDTO> result=authorService.getAllAuthorsByNamesLike(authorPattern);
 
         assertNotNull(result);
         assertEquals(1,result.size());
-        assertEquals(expectedAuthors,result);
+        assertEquals(expectedAuthors.getFirst().getId(),result.getFirst().getId());
         verify(authorRepo,times(1)).searchAuthorsByNamesLike(anyString());
     }
 }

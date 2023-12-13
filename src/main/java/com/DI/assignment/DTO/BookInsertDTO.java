@@ -3,14 +3,14 @@ package com.DI.assignment.DTO;
 import com.DI.assignment.Entity.Book;
 
 public class BookInsertDTO {
-    private Book book;
+    private BookDTO book;
     private String authorName;
 
-    public Book getBook() {
+    public BookDTO getBook() {
         return book;
     }
 
-    public void setBook(Book book) {
+    public void setBook(BookDTO book) {
         this.book = book;
     }
 

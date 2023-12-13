@@ -2,7 +2,6 @@ package com.DI.assignment.services;
 
 import com.DI.assignment.DTO.AuthorDTO;
 import com.DI.assignment.DTO.BookDTO;
-import com.DI.assignment.Entity.Author;
 import com.DI.assignment.Entity.Book;
 import com.DI.assignment.Utils.AuthorUtil;
 import com.DI.assignment.Utils.BookUtil;
@@ -11,7 +10,6 @@ import com.DI.assignment.repository.BookRepo;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -32,7 +30,7 @@ public class BookService {
         this.restTemplate=builder.build();
     }
     public BookDTO saveBook(BookDTO bookDTO, String author){
-            AuthorDTO foundAuthorDTO= AuthorUtil.entityToDTO(authorRepo.findByName(author));
+            AuthorDTO foundAuthorDTO = AuthorUtil.entityToDTO(authorRepo.findByName(author));
             if(foundAuthorDTO==null){
                 throw new IllegalArgumentException("No Author found");
             }

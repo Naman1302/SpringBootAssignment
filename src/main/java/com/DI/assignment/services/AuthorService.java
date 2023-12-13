@@ -1,7 +1,6 @@
 package com.DI.assignment.services;
 
 import com.DI.assignment.DTO.AuthorDTO;
-import com.DI.assignment.Entity.Author;
 import com.DI.assignment.Utils.AuthorUtil;
 import com.DI.assignment.repository.AuthorRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +15,14 @@ public class AuthorService {
     private AuthorRepo authorRepo;
 
     public List<AuthorDTO> getAllAuthors() {
-        List<Author> authors= authorRepo.findAll();
-        return authors.stream().map(AuthorUtil::entityToDTO).collect(Collectors.toList());
+        return authorRepo.findAll().stream().map(AuthorUtil::entityToDTO).toList();
     }
-    public AuthorDTO addAuthor(AuthorDTO authorDTO){
-        Author author= authorRepo.save(AuthorUtil.dtoToEntity(authorDTO));
-        return AuthorUtil.entityToDTO(author);
+
+    public AuthorDTO addAuthor(AuthorDTO authorDTO) {
+        return AuthorUtil.entityToDTO(authorRepo.save(AuthorUtil.dtoToEntity(authorDTO)));
     }
 
     public List<AuthorDTO> getAllAuthorsByNamesLike(String authorPattern) {
-        List<Author> authors=authorRepo.searchAuthorsByNamesLike(authorPattern);
-        return authors.stream().map(AuthorUtil::entityToDTO).collect(Collectors.toList());
+        return authorRepo.searchAuthorsByNamesLike(authorPattern).stream().map(AuthorUtil::entityToDTO).collect(Collectors.toList());
     }
 }

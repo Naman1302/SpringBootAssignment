@@ -46,7 +46,7 @@ public class BookController {
     @PostMapping
     public ResponseEntity<BookDTO> addBook(@Valid @RequestBody  BookInsertDTO request){
         //System.out.println(request.toString());
-        BookDTO bookDTO= BookUtil.entityToDTO(request.getBook());
+        BookDTO bookDTO= request.getBook();
         String authorName=request.getAuthorName();
         BookDTO savedBook=bookService.saveBook(bookDTO,authorName);
         return ResponseEntity.ok(savedBook);

@@ -2,18 +2,24 @@ package com.DI.assignment.DTO;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
+@Getter
 public class BookDTO {
-    @Id
+
     private ObjectId id;
+
     @NotBlank(message = "Name is mandatory")
     private String bookName;
-    @Min(value = 1)
+
+    @Min(value = 0)
     private int copiesAvailable;
+
     @NotBlank(message = "Genre cannot be blank")
     private String genre;
+
     private ObjectId authorId;
 
     public BookDTO() {
@@ -27,40 +33,20 @@ public class BookDTO {
         this.authorId = authorId;
     }
 
-    public ObjectId getId() {
-        return id;
-    }
-
     public void setId(ObjectId id) {
         this.id = id;
-    }
-
-    public int getCopiesAvailable() {
-        return copiesAvailable;
     }
 
     public void setCopiesAvailable(int copiesAvailable) {
         this.copiesAvailable = copiesAvailable;
     }
 
-    public String getGenre() {
-        return genre;
-    }
-
     public void setGenre(String genre) {
         this.genre = genre;
     }
 
-    public ObjectId getAuthorId() {
-        return authorId;
-    }
-
     public void setAuthorId(ObjectId authorId) {
         this.authorId = authorId;
-    }
-
-    public String getBookName() {
-        return bookName;
     }
 
     public void setBookName(String bookName) {
