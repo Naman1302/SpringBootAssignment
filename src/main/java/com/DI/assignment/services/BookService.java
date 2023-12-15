@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class BookService {
-
+    @Autowired
     private final RestTemplate restTemplate;
     @Autowired
     private BookRepo bookRepo;
@@ -73,7 +73,7 @@ public class BookService {
     public List<BookDTO> getBooksByAuthorsNameByFlux(String authorList){
         String fluxApi="http://localhost:8081/books/byAuthorsNames";
 
-        BookDTO[] response=restTemplate.getForObject(fluxApi+"?authorList={authorList}",BookDTO[].class,authorList);
+        BookDTO[] response=restTemplate.getForObject(fluxApi+"?authorList="+authorList,BookDTO[].class);
 
         return Arrays.asList(response);
     }

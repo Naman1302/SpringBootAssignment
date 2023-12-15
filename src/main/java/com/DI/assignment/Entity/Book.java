@@ -30,6 +30,14 @@ public class Book {
 
     }
 
+    public Book(ObjectId id, String bookName, int copiesAvailable, String genre, ObjectId authorId) {
+        this.id=id;
+        this.bookName=bookName;
+        this.copiesAvailable=copiesAvailable;
+        this.genre=genre;
+        this.authorId=authorId;
+    }
+
     public ObjectId getId() {
         return id;
     }
